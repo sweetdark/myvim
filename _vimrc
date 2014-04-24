@@ -3,8 +3,10 @@ set enc=utf-8
 set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
 set termencoding=utf-8
 set encoding=utf-8
-set fileencodings=ucs-bom,utf-8,cp936
+set fileencodings=utf-8,ucs-bom,utf-8,cp936
 set fileencoding=utf-8
+set ambiwidth=double
+set go=
 set nu
 
 
@@ -177,3 +179,7 @@ set path=.,E:\Program_Files\Microsoft_Visual_Studio_8\VC\PlatformSDK\Include,,
 syntax on
 let tlist_txt_settings = 'txt;c:content;f:figures;t:tables'
 au BufRead,BufWrite *.txt setlocal ft=txt
+let g:VEConf_systemEncoding='cp936'
+let g:VEConf_win32Disks=["C:","D:","E:","F:","G:"]
+let g:VEConf_browseHistory=20
+let g:VEConf_showFolderStatus=0

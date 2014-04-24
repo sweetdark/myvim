@@ -10,7 +10,6 @@
 "
 "==================================================
 
-
 " See if we are already loaded, thanks to Dennis Hostetler.
 if exists("loaded_vimExplorer")
     finish
@@ -499,9 +498,11 @@ function! VEPlatform.start(path)
     let convPath = self.escape(a:path)
     "escape() function will do iconv to the string, so call it
     "before iconv().
+    echomsg "filepath " . a:path
     if g:VEPlatform.haswin32()
         let convPath = substitute(convPath,'/',"\\",'g')
         let convPath = " start \"\" \"" . convPath . "\""
+        echomsg "convPath " . convPath
         let ret = self.system(convPath)
     else
         if g:VEConf_usingKDE
