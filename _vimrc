@@ -46,13 +46,14 @@ function MyDiff()
   endif
   silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
 endfunction
-"设置tab转换为空格
-set sw=2
-set ts=2
 
 "自动缩进
 set autoindent
 set cindent
+
+"设置tab转换为空格
+set sw=4
+set ts=4
 
 filetype indent on
 
