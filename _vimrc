@@ -4,7 +4,7 @@ set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
 set termencoding=utf-8
 set encoding=utf-8
 set fileencodings=utf-8,ucs-bom,utf-8,cp936
-set fileencoding=utf-8
+set fileencoding=cp936
 set ambiwidth=double
 set go=
 set nu
@@ -48,17 +48,23 @@ function MyDiff()
   silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
 endfunction
 "设置tab转换为空格
-set sw=2
-set ts=2
+set sw=4
+set ts=4
 
 "自动缩进
 set autoindent
-"set cindent
+set cindent
 
 filetype indent on
 
+
 autocmd FileType c,cpp  setl fdm=syntax | setl fen 
 
+" plugin
+filetype plugin indent on
+filetype plugin on
+let g:pydiction_location='E:\Program Files\Vim\complete-dict'
+let g:pydiction_menu_height=4
 
 "去空行
 nnoremap <F2> :g/^\s*$/d<CR>
@@ -93,7 +99,7 @@ autocmd FileType c,cpp map <buffer> <leader><space> :w<cr>:make<cr>
 set completeopt=menu
 
 "taglist
-set tags=D:\ue\ueddt\src\core\tags
+set tags=tags;/
 
 "不生成备份文件
 set nobackup

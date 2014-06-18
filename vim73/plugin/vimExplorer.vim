@@ -10,6 +10,7 @@
 "
 "==================================================
 
+
 " See if we are already loaded, thanks to Dennis Hostetler.
 if exists("loaded_vimExplorer")
     finish
@@ -318,6 +319,7 @@ let VEConf.filePanelHotkey.tabView         = 'e'
 let VEConf.filePanelHotkey.openRenamer     = ';r'
 let VEConf.filePanelHotkey.startShell      = ';c'
 let VEConf.filePanelHotkey.startExplorer   = ';e'
+"let VEConf.filePanelHotkey.OpenFileLocate   = ';e'
 
 if exists("g:VEConf_fileHotkey")
     if type(g:VEConf_fileHotkey) != type({})
@@ -498,11 +500,9 @@ function! VEPlatform.start(path)
     let convPath = self.escape(a:path)
     "escape() function will do iconv to the string, so call it
     "before iconv().
-    echomsg "filepath " . a:path
     if g:VEPlatform.haswin32()
         let convPath = substitute(convPath,'/',"\\",'g')
         let convPath = " start \"\" \"" . convPath . "\""
-        echomsg "convPath " . convPath
         let ret = self.system(convPath)
     else
         if g:VEConf_usingKDE
@@ -722,7 +722,7 @@ endfunction
 function! VEPlatform.cdToPath(path)
     try
         "In win32, VE can create folder starts with space. So ...
-        exec "lcd " . escape(a:path,' %#')
+        exec "cd " . escape(a:path,' %#')
     catch
         echohl ErrorMsg | echomsg "Can not cd to path: " . a:path | echohl None
     endtry
@@ -1320,6 +1320,7 @@ function! s:VETreePanel.nodeClicked(num)
     let path = self.tree.content[a:num][1]
     if self.path != path
         "let self.path = path
+        echo path
         call VE_GotoPath(path)
         "Do not toggle if it is the first time switch to another tree node.
         call self.setFocus()
@@ -1334,7 +1335,8 @@ function! s:VETreePanel.pathChanged(path)
         return
     endif
     call g:VEPlatform.cdToPath(a:path)
-    let self.path = g:VEPlatform.getcwd()
+    "let self.path = g:VEPlatform.getcwd()
+    let self.path = a:path
     call self.tree.openPath(self.path)
     call self.drawTree()
 endfunction
@@ -1577,6 +1579,13 @@ function! s:VEFilePanel.sortByTime()
         call add(self.displayList,["  " . g:VEPlatform.pathToName(fileGroup[i]),fileGroup[i]])
     endfor
 endfunction
+
+fun! OpenFileLocate()
+    let syscmd=printf('!start explorer lect, %s',expand('%'))
+    echo syscmd
+    silent! exec syscmd
+endf
+
 
 " 3 not implemented yet
 "function! s:VEFilePanel.sortBySize()
@@ -2128,6 +2137,7 @@ endfunction
 function! s:VEFilePanel.getPathUnderCursor(num)
     return self.displayList[a:num][1]
 endfunction
+nmap ,p :call OpenFileLocate()<cr>
 
 " class VEPreviewPanel {{{1
 "=============================
