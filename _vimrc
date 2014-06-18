@@ -55,6 +55,9 @@ set cindent
 set sw=4
 set ts=4
 
+filetype plugin indent on
+autocmd FileType python setlocal et sta sw=4 sts=4
+
 filetype indent on
 
 autocmd FileType c,cpp  setl fdm=syntax | setl fen 
@@ -89,8 +92,6 @@ autocmd FileType c,cpp map <buffer> <leader><space> :w<cr>:make<cr>
 "set completeopt=preview,menu
 set completeopt=menu
 
-"taglist
-set tags=E:\ue\ueddt\src\core\tags
 
 "不生成备份文件
 set nobackup
@@ -112,6 +113,18 @@ set autochdir
 colorscheme murphy
 
 set foldmethod=manual " 手动折叠
+" python 设置
+autocmd FileType python setlocal foldmethod=indent
+"默认展开所有代码
+set foldlevel=99
+
+"让Vim的补全菜单行为与一般IDE一致(参考VimTip1228)
+set completeopt+=longest
+ 
+"离开插入模式后自动关闭预览窗口
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+" 在父目录找tags
+set tags=tags;/
 
 set nocompatible "去掉讨厌的有关vi一致性模式，避免以前版本的一些bug和局限
 
