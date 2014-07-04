@@ -3,10 +3,12 @@ set enc=utf-8
 set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
 set termencoding=utf-8
 set encoding=utf-8
-set fileencodings=ucs-bom,utf-8,cp936
+set fileencodings=utf-8,ucs-bom,cp936
 set fileencoding=utf-8
 set go=
 set nu
+
+execute pathogen#infect()
 
 
 set nocompatible
@@ -62,6 +64,8 @@ filetype indent on
 
 autocmd FileType c,cpp  setl fdm=syntax | setl fen 
 
+autocmd BufNewFile,BufRead *.markdown,*.textile set filetype=octopress
+
 
 "去空行
 nnoremap <F2> :g/^\s*$/d<CR>
@@ -98,9 +102,6 @@ set nobackup
 
 "搜索时大小写
 set ignorecase smartcase
-
-"在下一行插入
-map <C-p> o<Esc>]p
 
 set nobackup
 set noswapfile
@@ -188,6 +189,11 @@ endfunction
   
 autocmd VimEnter * call TabPos_Initialize()  
 
+syntax enable
+set background=dark
+colorscheme solarized
+
+
 "vimwiki
 let g:vimwiki_use_mouse = 1
 let g:vimwiki_list = [{'path': 'E:/vimwiki/',
@@ -201,6 +207,5 @@ endif
 
 let g:VEConf_systemEncoding = 'cp936'
 let g:VEConf_browseHistory=20
-let g:VEConf_win32Disks=["C:","D:","E:"]
 "let g:VEConf_filePanelFilter = '*.txt\|*.ztx\|*.htm\|*.h\|*.cpp\|*.c\|*.dat'
 au GUIEnter * simalt ~x
