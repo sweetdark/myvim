@@ -5,9 +5,11 @@ set termencoding=utf-8
 set encoding=utf-8
 set fileencodings=utf-8,ucs-bom,utf-8,cp936
 set fileencoding=cp936
+"set fileencoding=utf-8
 set ambiwidth=double
+execute pathogen#infect()
 set go=
-set nu
+set nu 
 
 
 set nocompatible
@@ -55,16 +57,41 @@ set ts=4
 set autoindent
 set cindent
 
+autocmd FileType c,cpp  setl fdm=syntax | setl fen 
 filetype indent on
 
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=$VIM/vimfiles/Vundle.vim/
+let path='$VIM/vimfiles/bundle/'
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+
+" The following are examples of different formats supported.
+" Keep Plugin commands between vundle#begin/end.
+" plugin on GitHub repo
+Plugin 'tpope/vim-fugitive'
+Plugin 'nerdtree'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+
+autocmd FileType python setlocal et sta sw=4 sts=4
+
+filetype indent on
 
 autocmd FileType c,cpp  setl fdm=syntax | setl fen 
 
-" plugin
-filetype plugin indent on
-filetype plugin on
-let g:pydiction_location='E:\Program Files\Vim\complete-dict'
-let g:pydiction_menu_height=4
+autocmd BufNewFile,BufRead *.markdown,*.textile set filetype=octopress
+
 
 "去空行
 nnoremap <F2> :g/^\s*$/d<CR>
@@ -105,6 +132,7 @@ set tags=tags;/
 set nobackup
 set noswapfile
 
+
 "搜索时大小写
 set ignorecase smartcase
 
@@ -116,10 +144,26 @@ set autochdir
 " 设置配色方案
 colorscheme murphy
 
-"set foldmethod=manual " 手动折叠
+set foldmethod=manual " 手动折叠
+" python 设置
+autocmd FileType python setlocal foldmethod=indent
+"默认展开所有代码
+set foldlevel=99
+
+"让Vim的补全菜单行为与一般IDE一致(参考VimTip1228)
+set completeopt+=longest
+ 
+"离开插入模式后自动关闭预览窗口
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+" 在父目录找tags
+set tags=tags;/
 
 set nocompatible "去掉讨厌的有关vi一致性模式，避免以前版本的一些bug和局限
 
+"列出当前目录文件
+map <F3> :tabnew .<CR>
+"打开树状文件目录
+map <C-F3> \be
 "C，C++ 按F5编译运行
 map <F5> :call CompileRunGcc()<CR>
 func! CompileRunGcc()
@@ -157,7 +201,6 @@ set mps+=<:>
 au FileType c,cpp set mps+==:;
 
 "cscope插件配置
-cs a D:\ue\ueddt\src\cscope.out
 set cscopequickfix=s-,c-,d-,t-,e-
 
 "tabbar配置 在tab间使用alt+num快速切换
@@ -176,6 +219,7 @@ endfunction
   
 autocmd VimEnter * call TabPos_Initialize()  
 
+
 "vim打开时最大化
 au GUIENter * simalt ~x
 
@@ -189,3 +233,24 @@ let g:VEConf_systemEncoding='cp936'
 let g:VEConf_win32Disks=["C:","D:","E:","F:","G:"]
 let g:VEConf_browseHistory=20
 let g:VEConf_showFolderStatus=0
+
+syntax enable
+set background=dark
+colorscheme solarized
+
+
+"vimwiki
+let g:vimwiki_use_mouse = 1
+let g:vimwiki_list = [{'path': 'E:/vimwiki/',
+			\'path_html': 'E:/vimwiki/html/'}]
+
+if has("win32")
+  let $VIMFILES = $VIM.'/vimfiles'
+else
+  let $VIMFILES = $HOME.'/.vim'
+endif
+
+let g:VEConf_systemEncoding = 'cp936'
+let g:VEConf_browseHistory=20
+"let g:VEConf_filePanelFilter = '*.txt\|*.ztx\|*.htm\|*.h\|*.cpp\|*.c\|*.dat'
+au GUIEnter * simalt ~x

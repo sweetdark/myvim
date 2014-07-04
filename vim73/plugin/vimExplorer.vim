@@ -722,7 +722,7 @@ endfunction
 function! VEPlatform.cdToPath(path)
     try
         "In win32, VE can create folder starts with space. So ...
-        exec "cd " . escape(a:path,' %#')
+        exec "lcd " . escape(a:path,' %#')
     catch
         echohl ErrorMsg | echomsg "Can not cd to path: " . a:path | echohl None
     endtry
@@ -1320,7 +1320,6 @@ function! s:VETreePanel.nodeClicked(num)
     let path = self.tree.content[a:num][1]
     if self.path != path
         "let self.path = path
-        echo path
         call VE_GotoPath(path)
         "Do not toggle if it is the first time switch to another tree node.
         call self.setFocus()
