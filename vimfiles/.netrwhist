@@ -1,9 +1,4 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='C:/Users/Administrator/Desktop'
-let g:netrw_dirhist_2='C:/Users/Administrator'
-let g:netrw_dirhist_3='C:/Users'
-let g:netrw_dirhist_4='C:'
-let g:netrw_dirhist_5='C:/$Recycle.Bin'
-let g:netrw_dirhist_6='C:/Users/Administrator/Desktop'
-let g:netrw_dirhist_7='C:\Users\Administrator\Desktop'
+let g:netrw_dirhist_cnt =2
+let g:netrw_dirhist_1='C:/Ruby193/lib/ruby/gems/1.9.1/gems/stringex-1.4.0/lib/stringex'
+let g:netrw_dirhist_2='C:/Ruby193/lib/ruby/site_ruby/1.9.1/rubygems'

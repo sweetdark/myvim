@@ -27,6 +27,7 @@ function! s:Octopress(task, ...)
 		endif
 		let rakefile_path = substitute(system(g:octopress_rake_executable . " -e 'puts (Rake.application.find_rakefile_location())[1]'"), "\n", '', '')
 		let rake_output = system(g:octopress_rake_executable . ' ' . a:task . '[' . shellescape(join(a:000)) . ']')
+		echo 'asdf' + rakefile_path
 		let post_path = ''
 		for line in split(rake_output, "\n")
 			if line =~? 'Creating new post:'
@@ -35,7 +36,8 @@ function! s:Octopress(task, ...)
 			endif
 		endfor
 		if post_path == ''
-			echoerr 'Unable to find path to new post file'
+			echoerr 'psdft path' + rakefile_path
+			"echoerr 'Unable to find path to new post file'
 		else
 			execute ':edit ' . rakefile_path . '/' . post_path
 		endif

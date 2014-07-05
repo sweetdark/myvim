@@ -12,7 +12,6 @@ set go=
 set nu 
 
 
-set nocompatible
 source $VIMRUNTIME/vimrc_example.vim
 source $VIMRUNTIME/mswin.vim
 behave mswin
@@ -57,16 +56,28 @@ set ts=4
 set autoindent
 set cindent
 
+" 状态栏
+set laststatus=2      " 总是显示状态栏
+highlight StatusLine cterm=bold ctermfg=yellow ctermbg=blue
+
+" 获取当前路径，将$HOME转化为~
+function! CurDir()
+    let curdir = substitute(getcwd(), $HOME, "~", "g")
+    return curdir
+endfunction
+set statusline=[%n]\ %f%m%r%h\ \|\ \ pwd:\ %{CurDir()}\ \ \|%=\|\ %l,%c\ %p%%\ \|\ ascii=%b,hex=%b%{((&fenc==\"\")?\"\":\"\ \|\ \".&fenc)}\ \|\ %{$USER}\ @\ %{hostname()}\
+
 autocmd FileType c,cpp  setl fdm=syntax | setl fen 
 filetype indent on
 
-set nocompatible              " be iMproved, required
+"vundle {{
+set nocompatible "去掉讨厌的有关vi一致性模式，避免以前版本的一些bug和局限
 filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
 set rtp+=$VIM/vimfiles/Vundle.vim/
 let path='$VIM/vimfiles/bundle/'
-call vundle#begin()
+call vundle#begin(path)
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
 
@@ -82,14 +93,12 @@ Plugin 'nerdtree'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
-
+"vundle }}
 
 autocmd FileType python setlocal et sta sw=4 sts=4
 
-filetype indent on
-
 autocmd FileType c,cpp  setl fdm=syntax | setl fen 
-
+"octopress
 autocmd BufNewFile,BufRead *.markdown,*.textile set filetype=octopress
 
 
@@ -142,7 +151,9 @@ set bsdir=buffer
 set autochdir
 
 " 设置配色方案
-colorscheme murphy
+colorscheme pablo
+"colorscheme murphy
+"colorscheme solarized
 
 set foldmethod=manual " 手动折叠
 " python 设置
@@ -158,7 +169,6 @@ autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 " 在父目录找tags
 set tags=tags;/
 
-set nocompatible "去掉讨厌的有关vi一致性模式，避免以前版本的一些bug和局限
 
 "列出当前目录文件
 map <F3> :tabnew .<CR>
@@ -227,16 +237,18 @@ au GUIENter * simalt ~x
 set path=.,E:\Program_Files\Microsoft_Visual_Studio_8\VC\PlatformSDK\Include,,
 
 syntax on
+syntax enable
+"vimexplorer
 let tlist_txt_settings = 'txt;c:content;f:figures;t:tables'
 au BufRead,BufWrite *.txt setlocal ft=txt
 let g:VEConf_systemEncoding='cp936'
-let g:VEConf_win32Disks=["C:","D:","E:","F:","G:"]
 let g:VEConf_browseHistory=20
 let g:VEConf_showFolderStatus=0
 
-syntax enable
-set background=dark
-colorscheme solarized
+"NERDTree
+map <C-n> :NERDTreeToggle<CR>
+
+
 
 
 "vimwiki
@@ -250,7 +262,4 @@ else
   let $VIMFILES = $HOME.'/.vim'
 endif
 
-let g:VEConf_systemEncoding = 'cp936'
-let g:VEConf_browseHistory=20
-"let g:VEConf_filePanelFilter = '*.txt\|*.ztx\|*.htm\|*.h\|*.cpp\|*.c\|*.dat'
 au GUIEnter * simalt ~x
