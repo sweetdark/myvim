@@ -1,4 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =2
-let g:netrw_dirhist_1='C:/Ruby193/lib/ruby/gems/1.9.1/gems/stringex-1.4.0/lib/stringex'
-let g:netrw_dirhist_2='C:/Ruby193/lib/ruby/site_ruby/1.9.1/rubygems'
