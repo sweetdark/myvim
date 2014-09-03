@@ -188,6 +188,8 @@ Plugin 'CmdlineComplete'
 " plugin on GitHub repo
 Plugin 'tpope/vim-fugitive'
 
+Plugin 'vim-scripts/autoload_cscope.vim'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -243,8 +245,7 @@ set completeopt=menu
 
 "taglist
 "let Tlist_Auto_Open = 1
-nnoremap <silent> <F10> :TlistToggle<CR>
-set tags=tags;/
+nnoremap <silent> <F9> :TlistToggle<CR>
 let Tlist_Ctags_Cmd='ctags' "因为我们放在环境变量里，所以可以直接执行
 
 "不生成备份文件
@@ -278,8 +279,8 @@ set completeopt+=longest
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 " 在父目录找tags
 """""""""""""设置开启ctags"""""""""""""     
-map <F4> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR>  
 set tags=tags;
+map <F4> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR>  
 
 
 "C，C++ 按F5编译运行
@@ -420,7 +421,7 @@ endfunction
 " <C-h>, <BS>: close popup and delete backword char.
 inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
 inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-"inoremap <expr><C-y>  neocomplcache#close_popup()
+inoremap <expr><C-y>  neocomplcache#close_popup()
 inoremap <expr><C-e>  neocomplcache#cancel_popup()
 " Close popup by <Space>.
 inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
