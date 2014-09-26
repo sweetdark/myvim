@@ -4,12 +4,16 @@ set enc=utf-8
 set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
 set termencoding=utf-8
 set encoding=utf-8
-set fileencodings=utf-8,ucs-bom,utf-8,cp936
+set fileencodings=utf-8,ucs-bom,cp936
 "set fileencoding=cp936
 set fileencoding=utf-8
 set ambiwidth=double
 set go=
 set nu 
+
+" Following three lines remove the auto copy function from VIM
+set guioptions-=aA
+
 
 if has("win32")
   let $VIMFILES = $VIM.'/vimfiles'
@@ -82,11 +86,6 @@ function! CurDir()
 endfunction
 set statusline=[%n]\ %f%m%r%h\ \|\ \ pwd:\ %{CurDir()}\ \ \|%=\|\ %l,%c\ %p%%\ \|\ ascii=%b,hex=%b%{((&fenc==\"\")?\"\":\"\ \|\ \".&fenc)}\ \|\ %{$USER}\ @\ %{hostname()}\
 
-"去掉自动注释
-autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
-autocmd FileType c,cpp  setl fdm=syntax | setl fen 
-filetype indent on
 
 
 let iCanHazVundle=1
@@ -125,12 +124,8 @@ Plugin 'majutsushi/tagbar'
 Plugin 'kien/ctrlp.vim'
 "" Extension to ctrlp, for fuzzy command finder
 Plugin 'fisadev/vim-ctrlp-cmdpalette'
-"" Zen coding
-""Plugin 'mattn/emmet-vim'
 "" Git integration
 "Plugin 'motemen/git-vim'
-"" Tab list panel
-"Plugin 'kien/tabman.vim'
 "" Airline
 Plugin 'bling/vim-airline'
 "" Terminal Vim with 256 colors colorscheme
@@ -156,17 +151,13 @@ Plugin 'Shougo/neocomplcache.vim'
 " Track the engine.
 Plugin 'SirVer/ultisnips'
 "python dictionary
-Plugin 'vim-scripts/Pydiction'
+Plugin 'Pydiction'
 
 " Snippets are separated from the engine. Add this if you want them:
 Plugin 'honza/vim-snippets'
 "
-"" Git/mercurial/others diff icons on the side of the file lines
-"Plugin 'mhinz/vim-signify'
 "" Automatically sort python imports
 "Plugin 'fisadev/vim-isort'
-"" Drag visual blocks arround
-"Plugin 'fisadev/dragvisuals.vim'
 "" Window chooser
 Plugin 't9md/vim-choosewin'
 "" Python and other languages code checker
@@ -181,8 +172,6 @@ Plugin 'Wombat'
 "Plugin 'YankRing.vim'
 "cmd line auto complete 
 Plugin 'CmdlineComplete'
-"calendar 
-"Plugin 'mattn/calendar.vim'
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo
@@ -190,6 +179,10 @@ Plugin 'tpope/vim-fugitive'
 
 Plugin 'vim-scripts/autoload_cscope.vim'
 
+Plugin 'Lokaltog/vim-easymotion'
+
+Plugin 'airblade/vim-rooter'
+Plugin 'tpope/vim-endwise'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -202,13 +195,24 @@ if iCanHazVundle == 0
     echo ""
     :BundleInstall
 endif
-"
+
+" Detect filetype
+autocmd BufNewFile, BufRead *.cpp,*.c set filetype=cpp
+
+autocmd BufNewFile, BufRead *.py set filetype=python
+"octopress
+autocmd BufNewFile,BufRead *.markdown,*.textile set filetype=octopress
+
+"去掉自动注释
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
+autocmd FileType c,cpp  setl fdm=syntax | setl fen 
+
 
 autocmd FileType python setlocal et sta sw=4 sts=4
 
 autocmd FileType c,cpp  setl fdm=syntax | setl fen 
-"octopress
-autocmd BufNewFile,BufRead *.markdown,*.textile set filetype=octopress
+
 
 
 "去空行
@@ -217,10 +221,6 @@ nnoremap <F2> :g/^\s*$/d<CR>
 nnoremap <C-F2> :vert diffsplit
 "新建标签
 map <M-F2> :tabnew<CR>
-"列出当前目录文件
-map <F3> :tabnew .<CR>
-"打开树状文件目录
-map <C-F3> \be
 
 "设置文本格式
 set fileformats=dos,unix,mac
@@ -262,11 +262,11 @@ set bsdir=buffer
 set autochdir
 
 " 设置配色方案
-colorscheme wombat
+"colorscheme wombat
 "colorscheme murphy
-"colorscheme solarized
+colorscheme solarized
 
-set foldmethod=manual " 手动折叠
+"set foldmethod=manual " 手动折叠
 " python 设置
 autocmd FileType python setlocal foldmethod=indent
 "默认展开所有代码
@@ -350,7 +350,7 @@ syntax enable
 "vimexplorer
 let tlist_txt_settings = 'txt;c:content;f:figures;t:tables'
 au BufRead,BufWrite *.txt setlocal ft=txt
-let g:VEConf_systemEncoding='cp936'
+"let g:VEConf_systemEncoding='cp936'
 let g:VEConf_browseHistory=20
 let g:VEConf_showFolderStatus=0
 
@@ -384,7 +384,7 @@ let g:neocomplcache_enable_fuzzy_completion = 1
 let g:neocomplcache_fuzzy_completion_start_length = 2
 let g:neocomplcache_auto_completion_start_length = 2
 let g:neocomplcache_manual_completion_start_length = 2
-"let g:neocomplcache_min_keyword_length = 2
+let g:neocomplcache_min_keyword_length = 2
 
 
 " Enable heavy features.
@@ -410,6 +410,7 @@ inoremap <expr><C-l>     neocomplcache#complete_common_string()
 
 " Recommended key-mappings.
 " <CR>: close popup and save indent.
+" resolve conflict with *endwisw* pugin
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 function! s:my_cr_function()
   "return neocomplcache#smart_close_popup() . "\<CR>"
@@ -490,8 +491,6 @@ let g:syntastic_check_on_open = 1
 " don't put icons on the sign column (it hides the vcs status icons of signify)
 let g:syntastic_enable_signs = 0
 "--------------
-"Clendar
-let g:calendar_google_calendar = 1
 
 "ultisnipsedit
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
@@ -501,11 +500,41 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
+
 "choosewin
-nmap  -  <Plug>(choosewin)
+nmap - <Plug>(choosewin)
 "----------
 "pydiction
 let g:pydiction_location = '$VIMFILE/bundle/pydiction/complete-dict'
+
+"easymotion------------------------
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+
+" Bi-directional find motion
+" Jump to anywhere you want with minimal keystrokes, with just one key binding.
+" `s{char}{label}`
+"nmap <Leader>s <Plug>(easymotion-s)
+" or
+" `s{char}{char}{label}`
+" Need one more keystroke, but on average, it may be more comfortable.
+nmap <Leader>s <Plug>(easymotion-s2)
+
+" Turn on case sensitive feature
+let g:EasyMotion_smartcase = 1
+
+" JK motions: Line motions
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+"------------------------------
+" |wildignore| influences the result of |expand()|, |globpath()| and
+"|glob()| which many plugins use to find stuff on the system (e.g. VCS related
+"plugins look for .git/, .hg/,... some other plugins look for external *.exe
+"tools on Windows).
+if(g:iswindows)
+	set wildignore+=*\\.git\\*,*\\.hg\\*,*\\.svn\\*
+else
+	set wildignore+=*/.git/*,*/.hg/*,*/.svn/*
+endif
 
 "CTAG and cscope 
 map <F12> :call Do_CsTag()<CR>
