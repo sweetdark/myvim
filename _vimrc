@@ -2,9 +2,8 @@
 "set shell=c:/cygwin/bin/bash
 set enc=utf-8
 set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
-set termencoding=utf-8
-set encoding=utf-8
-set fileencodings=utf-8,ucs-bom,cp936
+"set termencoding=utf-8
+set termencoding=cp936
 "set fileencoding=cp936
 set fileencoding=utf-8
 set ambiwidth=double
@@ -180,9 +179,9 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'vim-scripts/autoload_cscope.vim'
 
 Plugin 'Lokaltog/vim-easymotion'
-
 Plugin 'airblade/vim-rooter'
 Plugin 'tpope/vim-endwise'
+Plugin 'java_checkstyle.vim'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -197,21 +196,24 @@ if iCanHazVundle == 0
 endif
 
 " Detect filetype
-autocmd BufNewFile, BufRead *.cpp,*.c set filetype=cpp
+autocmd BufNewFile,BufRead *.h,*.cpp,*.c set filetype=cpp
 
-autocmd BufNewFile, BufRead *.py set filetype=python
+autocmd BufNewFile,BufRead *.py set filetype=python
+
+autocmd BufRead,BufNewFile *.java set filetype=java
 "octopress
-autocmd BufNewFile,BufRead *.markdown,*.textile set filetype=octopress
+autocmd BufNewFile,BufRead *.markdown,*.md,*.textile set filetype=octopress
 
 "去掉自动注释
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 autocmd FileType c,cpp  setl fdm=syntax | setl fen 
 
-
 autocmd FileType python setlocal et sta sw=4 sts=4
 
-autocmd FileType c,cpp  setl fdm=syntax | setl fen 
+"checkstyle
+let Checkstyle_Classpath = "D:\devtool\adt-bundle-windows-x86_64-20131030\eclipse\plugins\net.sf.eclipsecs.checkstyle_5.7.0.201402131929\checkstyle-5.7-all.jar"
+let Checkstyle_XML = "D:\devtool\adt-bundle-windows-x86_64-20131030\eclipse\plugins\net.sf.eclipsecs.core_5.7.0.201402131929\sun_checks_eclipse.xml"
 
 
 
@@ -266,9 +268,14 @@ set autochdir
 "colorscheme murphy
 colorscheme solarized
 
+"--------启用代码折叠，用空格键来开关折叠   
 "set foldmethod=manual " 手动折叠
+set foldenable    " 打开代码折叠  
+set foldmethod=syntax        " 选择代码折叠类型  
 " python 设置
 autocmd FileType python setlocal foldmethod=indent
+nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc':'zo')<CR>   
+
 "默认展开所有代码
 set foldlevel=99
 
@@ -357,7 +364,9 @@ let g:VEConf_showFolderStatus=0
 "NERDTree
 map <F11> :NERDTreeToggle<CR>
 
-
+"surround
+autocmd FileType markdown,md,octopress let b:surround_97 = " ``` "
+"
 
 "tabbar
 nnoremap <silent> <F10> :TagbarToggle<CR>
@@ -487,7 +496,7 @@ let g:airline#extensions#whitespace#enabled = 0
 " show list of errors and warnings on the current file
 nmap <leader>e :Errors<CR>
 " check also when just opened the file
-let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_open = 0
 " don't put icons on the sign column (it hides the vcs status icons of signify)
 let g:syntastic_enable_signs = 0
 "--------------
@@ -496,7 +505,8 @@ let g:syntastic_enable_signs = 0
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsJumpBackwardTrigger="<c-n>"
+let g:UltiSnipsUsePythonVersion = 2
 
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
@@ -508,7 +518,7 @@ nmap - <Plug>(choosewin)
 let g:pydiction_location = '$VIMFILE/bundle/pydiction/complete-dict'
 
 "easymotion------------------------
-let g:EasyMotion_do_mapping = 0 " Disable default mappings
+"let g:EasyMotion_do_mapping = 0 " Disable default mappings
 
 " Bi-directional find motion
 " Jump to anywhere you want with minimal keystrokes, with just one key binding.
@@ -517,7 +527,7 @@ let g:EasyMotion_do_mapping = 0 " Disable default mappings
 " or
 " `s{char}{char}{label}`
 " Need one more keystroke, but on average, it may be more comfortable.
-nmap <Leader>s <Plug>(easymotion-s2)
+nmap <Leader><Leader>s <Plug>(easymotion-s2)
 
 " Turn on case sensitive feature
 let g:EasyMotion_smartcase = 1
@@ -535,6 +545,12 @@ if(g:iswindows)
 else
 	set wildignore+=*/.git/*,*/.hg/*,*/.svn/*
 endif
+"ctrlp---
+let g:ctrlp_working_path_mode = 'a'
+"----
+
+
+nmap <Leader><Leader>p :!devenv E:\ue\ueddt\src\core\uefacade\uefacade.sln /build Release<CR>
 
 "CTAG and cscope 
 map <F12> :call Do_CsTag()<CR>
@@ -600,5 +616,30 @@ function Do_CsTag()
             execute "cs add cscope.out"
         endif
     endif
+endfunction
+
+command! -complete=shellcmd -nargs=+ Shell call s:RunShellCommand(<q-args>)
+function! s:RunShellCommand(cmdline)
+  let isfirst = 1
+  let words = []
+  for word in split(a:cmdline)
+    if isfirst
+      let isfirst = 0  " don't change first word (shell command)
+    else
+      if word[0] =~ '\v[%#<]'
+        let word = expand(word)
+      endif
+      let word = shellescape(word, 1)
+    endif
+    call add(words, word)
+  endfor
+  let expanded_cmdline = join(words)
+  botright new
+  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
+  call setline(1, 'You entered:  ' . a:cmdline)
+  call setline(2, 'Expanded to:  ' . expanded_cmdline)
+  call append(line('$'), substitute(getline(2), '.', '=', 'g'))
+  silent execute '$read !'. expanded_cmdline
+  1
 endfunction
 
