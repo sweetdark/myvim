@@ -68,8 +68,8 @@ noremap <C-Z> u
 inoremap <C-Z> <C-O>u
 
 " CTRL-Y is Redo (although not repeat); not in cmdline though
-noremap <C-Y> <C-R>
-inoremap <C-Y> <C-O><C-R>
+"noremap <C-Y> <C-R>
+"inoremap <C-Y> <C-O><C-R>
 
 " Alt-Space is System menu
 if has("gui")

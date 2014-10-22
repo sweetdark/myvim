@@ -97,6 +97,13 @@ Tlist_Set_App()	taglist.txt	/*Tlist_Set_App()*
 Tlist_Update_File_Tags()	taglist.txt	/*Tlist_Update_File_Tags()*
 VimwikiLinkHandler	vimwiki.txt	/*VimwikiLinkHandler*
 alternative	vimwiki.txt	/*alternative*
+color-scheme-explorer	csExplorer.txt	/*color-scheme-explorer*
+csexplorer	csExplorer.txt	/*csexplorer*
+csexplorer-changelog	csExplorer.txt	/*csexplorer-changelog*
+csexplorer-credits	csExplorer.txt	/*csexplorer-credits*
+csexplorer-todo	csExplorer.txt	/*csexplorer-todo*
+csexplorer-usage	csExplorer.txt	/*csexplorer-usage*
+csexplorer.txt	csExplorer.txt	/*csexplorer.txt*
 g:vimwiki_CJK_length	vimwiki.txt	/*g:vimwiki_CJK_length*
 g:vimwiki_auto_checkbox	vimwiki.txt	/*g:vimwiki_auto_checkbox*
 g:vimwiki_autowriteall	vimwiki.txt	/*g:vimwiki_autowriteall*

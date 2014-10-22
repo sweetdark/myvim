@@ -103,14 +103,14 @@ filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
 "let iCanHazVundle=1
-set rtp+=~/.vim/bundle/Vundle.vim
+set rtp+=~/.vim/bundle/Vundle.vim/
 let path='$VIMFILES/bundle/'
 call vundle#begin(path)
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
-"Plugin 'gmarik/Vundle.vim'
+Plugin 'gmarik/Vundle.vim'
 Plugin 'fs111/pydoc.vim'
 
 " Better file browser
@@ -123,16 +123,12 @@ Plugin 'majutsushi/tagbar'
 Plugin 'kien/ctrlp.vim'
 "" Extension to ctrlp, for fuzzy command finder
 Plugin 'fisadev/vim-ctrlp-cmdpalette'
-"" Git integration
-"Plugin 'motemen/git-vim'
 "" Airline
 Plugin 'bling/vim-airline'
 "" Terminal Vim with 256 colors colorscheme
 Plugin 'fisadev/fisa-vim-colorscheme'
 "" Consoles as buffers
 "Plugin 'rosenfeld/conque-term'
-"" Pending tasks list
-"Plugin 'fisadev/FixedTaskList.vim'
 "" Surround
 Plugin 'tpope/vim-surround'
 "" Autoclose
@@ -160,7 +156,7 @@ Plugin 'honza/vim-snippets'
 "" Window chooser
 Plugin 't9md/vim-choosewin'
 "" Python and other languages code checker
-Plugin 'scrooloose/syntastic'
+" Plugin 'scrooloose/syntastic'
 "" Search results counter
 Plugin 'IndexedSearch'
 "" XML/HTML tags navigation
@@ -179,9 +175,11 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'vim-scripts/autoload_cscope.vim'
 
 Plugin 'Lokaltog/vim-easymotion'
-Plugin 'airblade/vim-rooter'
+" Plugin 'airblade/vim-rooter'
 Plugin 'tpope/vim-endwise'
 Plugin 'java_checkstyle.vim'
+Plugin 'haya14busa/incsearch.vim'
+Plugin 'dkprice/vim-easygrep'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -464,8 +462,8 @@ let g:neocomplcache_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 " Pathogen load
 filetype off
 
-call pathogen#infect()
-call pathogen#helptags()
+" call pathogen#infect()
+" call pathogen#helptags()
 
 filetype plugin indent on
 syntax on
@@ -499,6 +497,7 @@ nmap <leader>e :Errors<CR>
 let g:syntastic_check_on_open = 0
 " don't put icons on the sign column (it hides the vcs status icons of signify)
 let g:syntastic_enable_signs = 0
+let g:syntastic_check_on_wq = 0
 "--------------
 
 "ultisnipsedit
@@ -528,6 +527,11 @@ let g:pydiction_location = '$VIMFILE/bundle/pydiction/complete-dict'
 " `s{char}{char}{label}`
 " Need one more keystroke, but on average, it may be more comfortable.
 nmap <Leader><Leader>s <Plug>(easymotion-s2)
+
+"incsearch
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
 
 " Turn on case sensitive feature
 let g:EasyMotion_smartcase = 1
