@@ -13,6 +13,9 @@ set nu
 " Following three lines remove the auto copy function from VIM
 set guioptions-=aA
 
+"let yank use windows clipboard
+set clipboard=unnamed
+
 
 if has("win32")
   let $VIMFILES = $VIM.'/vimfiles'
@@ -26,17 +29,15 @@ else
     let g:iswindows=0
 endif
 
-
+"使用windows的vim避免按键冲突
 source $VIMRUNTIME/vimrc_example.vim
 source $VIMRUNTIME/mswin.vim
 behave mswin
 
 set langmenu=en_US
-"let $LANG= 'en_US'
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
 
-set langmenu=none
 language messages none
 
 set diffexpr=MyDiff()
@@ -172,7 +173,7 @@ Plugin 'CmdlineComplete'
 " plugin on GitHub repo
 Plugin 'tpope/vim-fugitive'
 
-Plugin 'vim-scripts/autoload_cscope.vim'
+" Plugin 'autoload_cscope.vim'
 
 Plugin 'Lokaltog/vim-easymotion'
 " Plugin 'airblade/vim-rooter'
@@ -180,6 +181,10 @@ Plugin 'tpope/vim-endwise'
 Plugin 'java_checkstyle.vim'
 Plugin 'haya14busa/incsearch.vim'
 Plugin 'dkprice/vim-easygrep'
+Plugin 'tommcdo/vim-exchange'
+Plugin 'justinmk/vim-ipmotion'
+Plugin 'argtextobj.vim'
+Plugin 'VisIncr'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
