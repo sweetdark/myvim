@@ -4,8 +4,8 @@ set enc=utf-8
 set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
 "set termencoding=utf-8
 set termencoding=cp936
-"set fileencoding=cp936
-set fileencoding=utf-8
+set fileencoding=cp936
+"set fileencoding=utf-8
 set ambiwidth=double
 set go=
 set nu 
@@ -151,6 +151,7 @@ Plugin 'Pydiction'
 
 " Snippets are separated from the engine. Add this if you want them:
 Plugin 'honza/vim-snippets'
+Plugin 'Rip-Rip/clang_complete'
 "
 "" Automatically sort python imports
 "Plugin 'fisadev/vim-isort'
@@ -172,7 +173,8 @@ Plugin 'CmdlineComplete'
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo
 Plugin 'tpope/vim-fugitive'
-
+"zen coding for html
+Plugin 'mattn/emmet-vim'
 " Plugin 'autoload_cscope.vim'
 
 Plugin 'Lokaltog/vim-easymotion'
@@ -185,6 +187,9 @@ Plugin 'tommcdo/vim-exchange'
 Plugin 'justinmk/vim-ipmotion'
 Plugin 'argtextobj.vim'
 Plugin 'VisIncr'
+"must install python 3.2
+"Plugin 'pyclewn'
+Plugin 'kien/rainbow_parentheses.vim'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -210,9 +215,10 @@ autocmd BufNewFile,BufRead *.markdown,*.md,*.textile set filetype=octopress
 "去掉自动注释
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-autocmd FileType c,cpp  setl fdm=syntax | setl fen 
+autocmd FileType c,cpp,h,cc,hpp setl fdm=syntax | setl fen 
 
 autocmd FileType python setlocal et sta sw=4 sts=4
+autocmd FileType c,cpp,h,cc,hpp map <buffer> <M-o> :A<CR>
 
 "checkstyle
 let Checkstyle_Classpath = "D:\devtool\adt-bundle-windows-x86_64-20131030\eclipse\plugins\net.sf.eclipsecs.checkstyle_5.7.0.201402131929\checkstyle-5.7-all.jar"
@@ -377,8 +383,33 @@ nnoremap <silent> <F10> :TagbarToggle<CR>
 "Pydoc
 let g:pydoc_cmd = 'python -m pydoc'
 
+"clang complete
+"autocmd FileType cpp,h,c,cc,hpp  let g:neocomplcache_disable_auto_complete=1
+let g:clang_snippets = 1
+let g:clang_snippets_engine = 'clang_complete'
+let g:clang_close_preview=1
+let g:clang_use_library=1
+let g:clang_complete_patterns=1
+let g:clang_jumpto_back_key="<C-T>"
+let g:clang_jumpto_declaration_key="<C-P>"
 
 "neocomplete---------
+"work with clang_complete
+if !exists('g:neocomplcache_force_omni_patterns')
+    let g:neocomplcache_force_omni_patterns = {}
+endif
+let g:neocomplcache_force_overwrite_completefunc = 1
+let g:neocomplcache_force_omni_patterns.c =
+            \ '[^.[:digit:] *\t]\%(\.\|->\)'
+let g:neocomplcache_force_omni_patterns.cpp =
+            \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+let g:neocomplcache_force_omni_patterns.objc =
+            \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+let g:neocomplcache_force_omni_patterns.objcpp =
+            \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+let g:clang_complete_auto = 0
+let g:clang_auto_select = 0
+
 "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
 " Disable AutoComplPop.
 let g:acp_enableAtStartup = 0
@@ -555,8 +586,48 @@ else
 	set wildignore+=*/.git/*,*/.hg/*,*/.svn/*
 endif
 "ctrlp---
-let g:ctrlp_working_path_mode = 'a'
+let g:ctrlp_working_path_mode = 'rc'
+let g:ctrlp_by_filename = 0
+let g:ctrlp_custom_ignore = {
+\ 'file': '\v(\.cpp|\.h|\.hh|\.cxx)@<!$'
+\ }
+let g:ctrlp_mruf_include = '\.py$\|\.rb$|\.c$|\.h|\.cpp$|\.java$|\.cc$'
 "----
+
+"zen emmet------
+let g:user_emmet_install_global = 0
+autocmd FileType html,css,markdown,octopress,md EmmetInstall
+"-------
+"pyclewn
+let g:pyclewn_args = "--pgm=C:/cygwin/bin/gdb.exe"
+"---
+
+"rainbow_parentheses --
+let g:rbpt_colorpairs = [
+    \ ['brown',       'RoyalBlue3'],
+    \ ['Darkblue',    'SeaGreen3'],
+    \ ['darkgray',    'DarkOrchid3'],
+    \ ['darkgreen',   'firebrick3'],
+    \ ['darkcyan',    'RoyalBlue3'],
+    \ ['darkred',     'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['brown',       'firebrick3'],
+    \ ['gray',        'RoyalBlue3'],
+    \ ['black',       'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['Darkblue',    'firebrick3'],
+    \ ['darkgreen',   'RoyalBlue3'],
+    \ ['darkcyan',    'SeaGreen3'],
+    \ ['darkred',     'DarkOrchid3'],
+    \ ['red',         'firebrick3'],
+    \ ]
+let g:rbpt_max = 16
+let g:rbpt_loadcmd_toggle = 0
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
+"---
 
 
 nmap <Leader><Leader>p :!devenv E:\ue\ueddt\src\core\uefacade\uefacade.sln /build Release<CR>
