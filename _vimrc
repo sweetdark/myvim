@@ -160,7 +160,7 @@ Plugin 't9md/vim-choosewin'
 "" Python and other languages code checker
 " Plugin 'scrooloose/syntastic'
 "" Search results counter
-Plugin 'IndexedSearch'
+"Plugin 'IndexedSearch'
 "" XML/HTML tags navigation
 Plugin 'matchit.zip'
 "" Gvim colorscheme
@@ -180,7 +180,6 @@ Plugin 'mattn/emmet-vim'
 Plugin 'Lokaltog/vim-easymotion'
 " Plugin 'airblade/vim-rooter'
 Plugin 'tpope/vim-endwise'
-Plugin 'java_checkstyle.vim'
 Plugin 'haya14busa/incsearch.vim'
 Plugin 'dkprice/vim-easygrep'
 Plugin 'tommcdo/vim-exchange'
@@ -190,6 +189,8 @@ Plugin 'VisIncr'
 "must install python 3.2
 "Plugin 'pyclewn'
 Plugin 'kien/rainbow_parentheses.vim'
+
+Plugin 'mhinz/vim-startify'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -220,10 +221,6 @@ autocmd FileType c,cpp,h,cc,hpp setl fdm=syntax | setl fen
 autocmd FileType python setlocal et sta sw=4 sts=4
 autocmd FileType c,cpp,h,cc,hpp map <buffer> <M-o> :A<CR>
 
-"checkstyle
-let Checkstyle_Classpath = "D:\devtool\adt-bundle-windows-x86_64-20131030\eclipse\plugins\net.sf.eclipsecs.checkstyle_5.7.0.201402131929\checkstyle-5.7-all.jar"
-let Checkstyle_XML = "D:\devtool\adt-bundle-windows-x86_64-20131030\eclipse\plugins\net.sf.eclipsecs.core_5.7.0.201402131929\sun_checks_eclipse.xml"
-
 
 
 "去空行
@@ -243,7 +240,7 @@ set showmatch
 " 匹配括号高亮的时间（单位是十分之一秒）
 set matchtime=1
 " 光标移动到buffer的顶部和底部时保持3行距离
-set scrolloff=3
+set scrolloff=2
 " 为C程序提供自动缩进
 set smartindent
 set showcmd " 输入的命令显示出来，看的清楚些
@@ -392,7 +389,8 @@ let g:clang_use_library=1
 let g:clang_complete_patterns=1
 let g:clang_jumpto_back_key="<C-T>"
 let g:clang_jumpto_declaration_key="<C-P>"
-
+let g:clang_user_options = "-IC:/LLVM/lib/clang/3.4/include"
+let g:clang_library_path = "C:/LLVM/bin"
 "neocomplete---------
 "work with clang_complete
 if !exists('g:neocomplcache_force_omni_patterns')
@@ -546,11 +544,19 @@ let g:UltiSnipsUsePythonVersion = 2
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
 
+"easymotion
+
+let g:EasyGrepExtraWarnings=0
+
+
 "choosewin
 nmap - <Plug>(choosewin)
 "----------
 "pydiction
 let g:pydiction_location = '$VIMFILE/bundle/pydiction/complete-dict'
+
+"startify
+let g:startify_bookmarks = [ '$VIM/_vimrc' ]
 
 "easymotion------------------------
 "let g:EasyMotion_do_mapping = 0 " Disable default mappings
