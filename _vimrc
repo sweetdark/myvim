@@ -1,14 +1,20 @@
-"编码设置
 "set shell=c:/cygwin/bin/bash
 set enc=utf-8
 set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
-"set termencoding=utf-8
-set termencoding=cp936
-set fileencoding=cp936
-"set fileencoding=utf-8
+set termencoding=utf-8
+"set termencoding=cp936
+"set fileencoding=cp936
+set fileencoding=utf-8
+setglobal fileencoding=utf-8 
 set ambiwidth=double
 set go=
 set nu 
+
+set grepprg=grep\ -nri 
+"高亮当前行
+set cursorline
+"hi CursorLineNr term=bold ctermfg=11 gui=bold guifg=Yellow
+"hi CursorLine  cterm=bold ctermbg=black ctermfg=green guibg=green guifg=yellow
 
 " Following three lines remove the auto copy function from VIM
 set guioptions-=aA
@@ -29,6 +35,17 @@ else
     let g:iswindows=0
 endif
 
+"------------------------------
+" |wildignore| influences the result of |expand()|, |globpath()| and
+"|glob()| which many plugins use to find stuff on the system (e.g. VCS related
+"plugins look for .git/, .hg/,... some other plugins look for external *.exe
+"tools on Windows).
+if(g:iswindows)
+	set wildignore+=*\\.git\\*,*\\.hg\\*,*\\.svn\\*
+else
+	set wildignore+=*/.git/*,*/.hg/*,*/.svn/*
+endif
+
 "使用windows的vim避免按键冲突
 source $VIMRUNTIME/vimrc_example.vim
 source $VIMRUNTIME/mswin.vim
@@ -38,7 +55,7 @@ set langmenu=en_US
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
 
-language messages none
+"language messages none
 
 set diffexpr=MyDiff()
 function MyDiff()
@@ -126,6 +143,7 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'fisadev/vim-ctrlp-cmdpalette'
 "" Airline
 Plugin 'bling/vim-airline'
+"Plugin 'bling/vim-bufferline'
 "" Terminal Vim with 256 colors colorscheme
 Plugin 'fisadev/fisa-vim-colorscheme'
 "" Consoles as buffers
@@ -160,7 +178,7 @@ Plugin 't9md/vim-choosewin'
 "" Python and other languages code checker
 " Plugin 'scrooloose/syntastic'
 "" Search results counter
-"Plugin 'IndexedSearch'
+Plugin 'IndexedSearch'
 "" XML/HTML tags navigation
 Plugin 'matchit.zip'
 "" Gvim colorscheme
@@ -174,20 +192,19 @@ Plugin 'CmdlineComplete'
 " plugin on GitHub repo
 Plugin 'tpope/vim-fugitive'
 "zen coding for html
-Plugin 'mattn/emmet-vim'
-" Plugin 'autoload_cscope.vim'
+"Plugin 'mattn/emmet-vim'
+"Plugin 'autoload_cscope.vim'
 
 Plugin 'Lokaltog/vim-easymotion'
-" Plugin 'airblade/vim-rooter'
+"Plugin 'airblade/vim-rooter'
 Plugin 'tpope/vim-endwise'
 Plugin 'haya14busa/incsearch.vim'
 Plugin 'dkprice/vim-easygrep'
 Plugin 'tommcdo/vim-exchange'
 Plugin 'justinmk/vim-ipmotion'
 Plugin 'argtextobj.vim'
-Plugin 'VisIncr'
+"Plugin 'VisIncr'
 "must install python 3.2
-"Plugin 'pyclewn'
 Plugin 'kien/rainbow_parentheses.vim'
 
 Plugin 'mhinz/vim-startify'
@@ -209,7 +226,7 @@ autocmd BufNewFile,BufRead *.h,*.cpp,*.c set filetype=cpp
 
 autocmd BufNewFile,BufRead *.py set filetype=python
 
-autocmd BufRead,BufNewFile *.java set filetype=java
+autocmd BufRead,BufNewFile *.java set filetype=java | set syntax=java
 "octopress
 autocmd BufNewFile,BufRead *.markdown,*.md,*.textile set filetype=octopress
 
@@ -380,6 +397,11 @@ nnoremap <silent> <F10> :TagbarToggle<CR>
 "Pydoc
 let g:pydoc_cmd = 'python -m pydoc'
 
+"python mode
+let g:pymode_indent = 1
+let g:pymode_folding = 1
+let g:pymode_syntax = 1
+let g:pymode = 1
 "clang complete
 "autocmd FileType cpp,h,c,cc,hpp  let g:neocomplcache_disable_auto_complete=1
 let g:clang_snippets = 1
@@ -422,7 +444,7 @@ let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 "let g:neocomplcache_enable_ignore_case = 1
 let g:neocomplcache_enable_auto_select = 1
 let g:neocomplcache_enable_fuzzy_completion = 1
-let g:neocomplcache_fuzzy_completion_start_length = 2
+let g:neocomplcache_fuzzy_completion_start_length = 3
 let g:neocomplcache_auto_completion_start_length = 2
 let g:neocomplcache_manual_completion_start_length = 2
 let g:neocomplcache_min_keyword_length = 2
@@ -465,6 +487,7 @@ inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
 inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
 inoremap <expr><C-y>  neocomplcache#close_popup()
 inoremap <expr><C-e>  neocomplcache#cancel_popup()
+inoremap <expr><C-u>  neocomplcache$smart_close_popup()."\<C-u>"
 " Close popup by <Space>.
 inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
 
@@ -492,16 +515,6 @@ let g:neocomplcache_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 
 "------------------------------------------
 
-" Python-mode ------------------------------
-" Pathogen load
-filetype off
-
-" call pathogen#infect()
-" call pathogen#helptags()
-
-filetype plugin indent on
-syntax on
-
 " don't use linter, we use syntastic for that
 let g:pymode_lint_on_write = 0
 let g:pymode_lint_signs = 0
@@ -517,16 +530,20 @@ nmap ,D :tab split<CR>:PymodePython rope.goto()<CR>
 nmap ,o :RopeFindOccurrences<CR>
 "--------------------
 " Airline ------------------------------
-
-let g:airline_powerline_fonts = 0
-let g:airline_theme = 'bubblegum'
+let g:airline#extensions#bufferline#enabled = 1
+let g:bufferline_echo = 0
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme             = 'powerlineish'
+let g:airline_enable_branch     = 1
 let g:airline#extensions#whitespace#enabled = 0
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
 "------
 "
 " Syntastic ------------------------------
 
 " show list of errors and warnings on the current file
-nmap <leader>e :Errors<CR>
+"nmap <leader>e :Errors<CR>
 " check also when just opened the file
 let g:syntastic_check_on_open = 0
 " don't put icons on the sign column (it hides the vcs status icons of signify)
@@ -544,8 +561,7 @@ let g:UltiSnipsUsePythonVersion = 2
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
 
-"easymotion
-
+"easygrep
 let g:EasyGrepExtraWarnings=0
 
 
@@ -569,6 +585,9 @@ let g:startify_bookmarks = [ '$VIM/_vimrc' ]
 " `s{char}{char}{label}`
 " Need one more keystroke, but on average, it may be more comfortable.
 nmap <Leader><Leader>s <Plug>(easymotion-s2)
+" JK motions: Line motions
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
 
 "incsearch
 map /  <Plug>(incsearch-forward)
@@ -578,19 +597,6 @@ map g/ <Plug>(incsearch-stay)
 " Turn on case sensitive feature
 let g:EasyMotion_smartcase = 1
 
-" JK motions: Line motions
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
-"------------------------------
-" |wildignore| influences the result of |expand()|, |globpath()| and
-"|glob()| which many plugins use to find stuff on the system (e.g. VCS related
-"plugins look for .git/, .hg/,... some other plugins look for external *.exe
-"tools on Windows).
-if(g:iswindows)
-	set wildignore+=*\\.git\\*,*\\.hg\\*,*\\.svn\\*
-else
-	set wildignore+=*/.git/*,*/.hg/*,*/.svn/*
-endif
 "ctrlp---
 let g:ctrlp_working_path_mode = 'rc'
 let g:ctrlp_by_filename = 0
@@ -602,11 +608,8 @@ let g:ctrlp_mruf_include = '\.py$\|\.rb$|\.c$|\.h|\.cpp$|\.java$|\.cc$'
 
 "zen emmet------
 let g:user_emmet_install_global = 0
-autocmd FileType html,css,markdown,octopress,md EmmetInstall
+"autocmd FileType html,css,markdown,octopress,md EmmetInstall
 "-------
-"pyclewn
-let g:pyclewn_args = "--pgm=C:/cygwin/bin/gdb.exe"
-"---
 
 "rainbow_parentheses --
 let g:rbpt_colorpairs = [
@@ -629,7 +632,7 @@ let g:rbpt_colorpairs = [
     \ ]
 let g:rbpt_max = 16
 let g:rbpt_loadcmd_toggle = 0
-au VimEnter * RainbowParenthesesToggle
+au VimEnter *.h,*.cpp,*.c,*.java,*.py,*.cc,*.hpp  RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
