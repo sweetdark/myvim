@@ -22,6 +22,8 @@ set guioptions-=aA
 "let yank use windows clipboard
 set clipboard=unnamed
 
+nnoremap ; :
+nnoremap : ;
 
 if has("win32")
   let $VIMFILES = $VIM.'/vimfiles'
@@ -106,14 +108,14 @@ set statusline=[%n]\ %f%m%r%h\ \|\ \ pwd:\ %{CurDir()}\ \ \|%=\|\ %l,%c\ %p%%\ \
 
 
 let iCanHazVundle=1
-let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
-if !filereadable(vundle_readme)
-    echo "Installing Vundle..."
-    echo ""
-    silent !mkdir -p ~/.vim/bundle
-    silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
-    let iCanHazVundle=0
-endif
+"let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
+"if !filereadable(vundle_readme)
+"    echo "Installing Vundle..."
+"    echo ""
+"    silent !mkdir -p ~/.vim/bundle
+"    silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
+"    "let iCanHazVundle=0
+"endif
 
 "vundle {{
 set nocompatible "去掉讨厌的有关vi一致性模式，避免以前版本的一些bug和局限
@@ -121,9 +123,10 @@ filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
 "let iCanHazVundle=1
-set rtp+=~/.vim/bundle/Vundle.vim/
-let path='$VIMFILES/bundle/'
-call vundle#begin(path)
+set rtp+=~/vimfiles/bundle/Vundle.vim/
+"let path='$VIMFILES/bundle/'
+"call vundle#begin(path)
+call vundle#begin('~/vimfiles/')
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
 
@@ -169,10 +172,8 @@ Plugin 'Pydiction'
 
 " Snippets are separated from the engine. Add this if you want them:
 Plugin 'honza/vim-snippets'
-Plugin 'Rip-Rip/clang_complete'
+"Plugin 'Rip-Rip/clang_complete'
 "
-"" Automatically sort python imports
-"Plugin 'fisadev/vim-isort'
 "" Window chooser
 Plugin 't9md/vim-choosewin'
 "" Python and other languages code checker
@@ -402,33 +403,7 @@ let g:pymode_indent = 1
 let g:pymode_folding = 1
 let g:pymode_syntax = 1
 let g:pymode = 1
-"clang complete
-"autocmd FileType cpp,h,c,cc,hpp  let g:neocomplcache_disable_auto_complete=1
-let g:clang_snippets = 1
-let g:clang_snippets_engine = 'clang_complete'
-let g:clang_close_preview=1
-let g:clang_use_library=1
-let g:clang_complete_patterns=1
-let g:clang_jumpto_back_key="<C-T>"
-let g:clang_jumpto_declaration_key="<C-P>"
-let g:clang_user_options = "-IC:/LLVM/lib/clang/3.4/include"
-let g:clang_library_path = "C:/LLVM/bin"
-"neocomplete---------
-"work with clang_complete
-if !exists('g:neocomplcache_force_omni_patterns')
-    let g:neocomplcache_force_omni_patterns = {}
-endif
-let g:neocomplcache_force_overwrite_completefunc = 1
-let g:neocomplcache_force_omni_patterns.c =
-            \ '[^.[:digit:] *\t]\%(\.\|->\)'
-let g:neocomplcache_force_omni_patterns.cpp =
-            \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-let g:neocomplcache_force_omni_patterns.objc =
-            \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-let g:neocomplcache_force_omni_patterns.objcpp =
-            \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-let g:clang_complete_auto = 0
-let g:clang_auto_select = 0
+
 
 "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
 " Disable AutoComplPop.
@@ -731,4 +706,3 @@ function! s:RunShellCommand(cmdline)
   silent execute '$read !'. expanded_cmdline
   1
 endfunction
-
